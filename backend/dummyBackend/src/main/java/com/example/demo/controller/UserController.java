@@ -20,11 +20,13 @@ public class UserController {
 	    private UserService service;
 
 	    @PostMapping("/register")
-	    private ResponseEntity<String> registerUser(@RequestBody User user){
-	        //save the user
-	        String msg = service.saveUser(user);
-
-	        return new ResponseEntity<String>(msg,HttpStatus.OK);
+	    private ResponseEntity<Boolean> registerUser(@RequestBody User user){
+	    	boolean isUnique= service.checkUniqueUser(user);
+	    	if(isUnique) {
+	    		service.saveUser(user);
+	    	}
+	        
+	    	return new ResponseEntity<>(isUnique,HttpStatus.OK);
 	    }
 
 }

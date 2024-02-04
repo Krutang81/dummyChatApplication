@@ -50,9 +50,6 @@
 //   }
 // }
 
-
-
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
@@ -61,7 +58,7 @@ Logger logger = Logger();
 
 class Service {
   // Creating the method to save user
-  Future<void> saveUser(String username, String email, String password) async {
+  Future<bool> saveUser(String username, String email, String password) async {
     logger.i("ENTER IN SERVICE AND saveUser method");
 
     try {
@@ -81,12 +78,20 @@ class Service {
       );
 
       if (response.statusCode == 200) {
-        logger.i("Data sent successfully");
+        bool isUnique = jsonDecode(response.body);
+        if (isUnique) {
+          logger.i("Data stored in mysql successfully");
+        } else {
+          logger.i("username or email is registered");
+        }
+        return isUnique;
       } else {
         logger.e("Failed to send data. Status code: ${response.statusCode}");
+        return false;
       }
     } catch (error) {
       logger.e("Catch Error: $error");
+      return false;
     }
   }
 }

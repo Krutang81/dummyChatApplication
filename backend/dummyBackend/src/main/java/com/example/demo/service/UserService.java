@@ -11,6 +11,10 @@ import com.example.demo.repo.UserRepo;
 public class UserService {
     @Autowired
     private UserRepo repo;
+    
+    public boolean checkUniqueUser(User user) {
+    	return repo.findByUsernameOrEmail(user.username, user.email)== null;
+    }
 
     public String saveUser(User user) {
 

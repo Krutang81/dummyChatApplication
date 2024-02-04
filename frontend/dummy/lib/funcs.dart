@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
+Service service = Service();
 
 Future<void> validateAndOtpPage(Format data, BuildContext context) async {
   // Validation
@@ -16,18 +17,36 @@ Future<void> validateAndOtpPage(Format data, BuildContext context) async {
   logger.i(data.username);
   logger.i(data.password);
   Navigator.push(
-      context, MaterialPageRoute(builder: (context) => const OtpPage()));
+    context,
+    MaterialPageRoute(
+      builder: (context) => const OtpPage(),
+    ),
+  );
 }
 
 Future<void> newUser(
     {required Format data, required BuildContext context}) async {
-  //Check unique Username
-  //Check password and confirm password are same
-  //Data will be stored in the MySql
-  Service service = Service();
-  service.saveUser(data.username, data.email, data.password);
-  //Now go to the login page
+  // if password correct
+  //First we will check whether the password and confirm password are same or not because we don't need database for it
+  if (data.password != data.confirmPassword) {
+    logger.i("Password and confirm password mismatch");
+    //Create a custom toast to tell the user that the password entered is incorrect
+  }
 
-  Navigator.push(
-      context, MaterialPageRoute(builder: (context) => const Login()));
+  //It means password and confirm password are same
+  else {
+    Future<bool> dataStore =
+        service.saveUser(data.username, data.email, data.password);
+    if (await dataStore) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Login(),
+        ),
+      );
+    }
+    else{
+      //Create a custom toast to tell the user that whether username or email is duplicated
+    }
+  }
 }
