@@ -38,6 +38,7 @@ dependencies:
   fluttertoast: ^8.2.4
   logger: ^2.0.2+1
   http: ^1.2.0
+  email_otp: ^2.1.2
 
 dev_dependencies:
   flutter_test:

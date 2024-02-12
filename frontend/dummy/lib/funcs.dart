@@ -56,6 +56,15 @@ Future<void> newUser(
       // textColor: Colors.black,
       fontSize: 16.0,
     );
+    Fluttertoast.showToast(
+      msg: "The password entered is incorrect",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      // backgroundColor: Colors.blue,
+      // textColor: Colors.black,
+      fontSize: 16.0,
+    );
   }
 
   //It means password and confirm password are same
