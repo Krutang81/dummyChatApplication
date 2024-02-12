@@ -28,5 +28,18 @@ public class UserController {
 	        
 	    	return new ResponseEntity<>(isUnique,HttpStatus.OK);
 	    }
+	    
+	    @PostMapping("/validate")
+	    private ResponseEntity<Boolean> validateUser(@RequestBody User user){
+//	    	System.out.println("validateUser"+user);
+	    		boolean isValidate= service.checkUsernameAndPassword(user);
+		    	if(isValidate) {
+		    		System.out.println("Validate Success "+user.username+" "+ user.password);
+		    	}else {
+		    		System.out.println("Validate UnSuccess");
+		    	}
+		    	
+		    	return new ResponseEntity<>(isValidate,HttpStatus.OK);
+	    }
 
 }
