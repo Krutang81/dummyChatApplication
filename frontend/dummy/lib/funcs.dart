@@ -3,6 +3,7 @@ import 'package:dummy/login_page.dart';
 import 'package:dummy/otp_page.dart';
 import 'package:dummy/service.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 
 Logger logger = Logger();
@@ -14,14 +15,29 @@ Future<void> validateAndOtpPage(Format data, BuildContext context) async {
   // if password correct
   // go to otp page
 
-  logger.i(data.username);
-  logger.i(data.password);
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const OtpPage(),
-    ),
-  );
+  Future<bool> emailAndPassword =
+      service.validateUser(data.username, data.password);
+  if (await emailAndPassword) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const OtpPage(),
+      ),
+    );
+  }
+  else{
+    Fluttertoast.showToast(
+          msg: "Username or password is incorrect",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          // backgroundColor: Colors.blue,
+          // textColor: Colors.black,
+          fontSize: 16.0);
+  }
+
+  // logger.i(data.username);
+  // logger.i(data.password);
 }
 
 Future<void> newUser(
@@ -31,6 +47,15 @@ Future<void> newUser(
   if (data.password != data.confirmPassword) {
     logger.i("Password and confirm password mismatch");
     //Create a custom toast to tell the user that the password entered is incorrect
+    Fluttertoast.showToast(
+      msg: "The password entered is incorrect",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      // backgroundColor: Colors.blue,
+      // textColor: Colors.black,
+      fontSize: 16.0,
+    );
   }
 
   //It means password and confirm password are same
@@ -44,9 +69,16 @@ Future<void> newUser(
           builder: (context) => const Login(),
         ),
       );
-    }
-    else{
+    } else {
       //Create a custom toast to tell the user that whether username or email is duplicated
+      Fluttertoast.showToast(
+          msg: "Username or email is duplicate",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          // backgroundColor: Colors.blue,
+          // textColor: Colors.black,
+          fontSize: 16.0);
     }
   }
 }
